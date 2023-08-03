@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Motion to Dance Music Generation using Latent Diffusion Model.">
+  <meta name="keywords" content="Dance motion to Music generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motion to Dance Music Generation using Latent Diffusion Model</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Motion to Dance Music Generation using Latent Diffusion Model</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Anonymous
+            </span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Have to be updated-->
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Supplementary PDF Link-->
+              <span class="link-block">
+                <a class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper (Supplementary)</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a class="button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!-- Have to be updated-->
+        <img class="round" style="width:1024px" src="./static/images/main_figure_dmd.jpg"/>
+      <!-- </div> -->
+      <h2 class="subtitle has-text-centered">
+        Given a motion and genre label as conditions, our method generates dance music using a latent diffusion model paired with a pre-trained Variational AutoEncoder (VAE)
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Music's role in games and animation, particularly in dance content, is essential for creating immersive experiences. 
+            Although recent studies have made strides in generating dance music from videos, their practicality in integrating music into games and animation remains limited. 
+            In this context, we present a method capable of generating plausible dance music from 3D motion data and genre labels. 
+            Our approach leverages a combination of a UNET based latent diffusion model and a pre-trained VAE model. 
+            To evaluate our model's performance, we employed metrics that assess various audio properties, including beat alignment, audio quality, motion-music correlation, 
+            and genre score. Quantitative results show that our approach is better than previous methods. 
+            Furthermore, we demonstrated that our model can generate audio that seamlessly fits to in-the-wild motion data. 
+            This capability enables us to create plausible dance music that complements the dynamic movements of characters 
+            and enhances the overall audiovisual experience in interactive media.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-3">Overview</h2>
+      <p></p>
+    </div>
+    <div class="columns is-centered">
+      <img class="round" style="width:960px" src="./static/images/overview_dmd.png"/>
+      <p></p>      
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          At training time, we employ a pre-trained Variational Autoencoder (VAE) to convert the audio mel-spectrogram into a latent code, 
+          which is then corrupted using the forward diffusion process to introduce noise. 
+          Our U-net based denoising network learns the score of the audio latent code's distribution by conditioning the features from audio-paired motion and genre. 
+          Specifically, we concatenate the motion features and genre information and provide them as inputs to all attention modules in our denoising network. 
+          During inference, we iteratively generate the audio-latent representation by incorporating the output from our network, 
+          which takes the preprocessed motion and genre information as input. 
+          This representation is then processed by the VAE decoder to generate the dance motion-aware audio mel-spectrogram. 
+          To reconstruct the corresponding audio waveform, we utilize the Griffin-Lim algorithm. 
+          This enables us to obtain the final dance music that aligns with the specified motion and genre inputs.
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+<br>
+<hr>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-3">Results</h2>
+    </div>
+
+    <br>
+    <br>
+    
+    <div class="columns">
+      <h3 class="title is-4">1. AIST++ Test Dataset</h3>
+    </div>
+    
+    <br>
+
+    <div class="columns">
+      <h4 class="title is-5">(a) Same Genre Label with Ground Truth</h4>
+    </div>
+
+    <br>
+
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidBR" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_BR.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Break | Genre : Break
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidJB" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_JB.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Jazz Ballet | Genre : Jazz Ballet
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidHO" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_HO.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : House | Genre : House
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidKR" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_KR.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Krump | Genre : Krump
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <br>
+    <br>
+
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidLH" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_LH.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : LA Sytle Hip-Hop | Genre : LA Sytle Hip-Hop
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidLO" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_LO.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Lock | Genre : Lock
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <br>
+    <br>
+    <br>
+
+    <div class="columns">
+      <h4 class="title is-5">(b) Different Genre Labels with Ground Truth</h4>
+    </div>
+
+    <br>
+
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidBRtoJB" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_BRtoJB.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Break | Genre : Jazz Ballet
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidJBtoBR" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_JBtoBR.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Jazz Ballet | Genre : Break
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <br>
+    <br>
+  
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidHOtoLH" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_HOtoLH.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : House | Genre : LA Style Hip-Hop
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidLHtoHO" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_LHtoHO.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : LA Style Hip-Hop | Genre : House
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <br>
+    <br>
+    <br>
+
+    <div class="columns">
+      <h3 class="title is-4">2. In-the-Wild Motion Data</h3>
+    </div>
+
+    <br>
+
+    <div class="columns">
+      <h4 class="title is-5">(a) Dance Motion</h4>
+    </div>
+
+    <br>
+
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidgangnamPO" controls loop playsinline height="100%">
+            <source src="./static/videos/vid_gangnam_PO.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Gangnam Style | Genre : Pop
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidswingWA" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_swing_WA.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Swing Dance | Genre : Waack
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <br>
+    <br>
+
+    <div class="columns">
+      <h4 class="title is-5">(b) Non-Dance Motion</h4>
+    </div>
+
+    <br>
+
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidfightBR" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_fight_BR.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Fist Fight | Genre : Break
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidthrowKR" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_throw_KR.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Shoulder Throw | Genre : Krump
+          </p>
+        </div>
+      </div>
+    </div>
+</section>
+
+<br>
+<br>
+<hr>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-3">Limitations</h2>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="columns">
+      <h3 class="title is-4">1. Diversity</h3>
+    </div>
+    
+    <div class="column is-centered has-text-centered">
+      <p>
+        Our method lacks the diversity as it generates similar audio when presented with different motions within the same genre.
+      </p>
+    </div>
+    
+    <br>
+
+    <div class="columns is-centered">
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidfightBR" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_fight_BR.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Fist Fight | Genre : Break
+          </p>
+        </div>
+      </div>
+
+      <div class="column has-text-centered">
+        <div class="content">
+          <video id="viidBR" controls loop playsinline height="100%">
+            <source src="./static/videos/viid_BR.mp4"
+            type="video/mp4">
+          </video>
+          <p>
+            Motion : Break | Genre : Break
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="columns">
+      <h3 class="title is-4">2. Vocals</h3>
+    </div>
+
+    <div class="column is-centered has-text-centered">
+      <p>
+        Our method has difficulty in generating plausible vocals.
+      </p>
+    </div>
+
+    <br>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="content">
+        <video id="viidMH" controls loop playsinline width="500">
+          <source src="./static/videos/viid_MH.mp4"
+          type="video/mp4">
+        </video>
+        <p>
+          Motion : Middle Hip-Hop | Genre : Middle Hip-Hop
+        </p>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="columns">
+      <h3 class="title is-4">3. Long Sequences</h3>
+    </div>
+
+    <div class="column is-centered has-text-centered">
+      <p>
+        Our method struggles to generate relatively long sequences.
+      </p>
+    </div>
+    
+    <br>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="content">
+        <video id="viidgangnamlong" controls loop playsinline width="500">
+          <source src="./static/videos/vid_gangnam_long.mp4"
+          type="video/mp4">
+        </video>
+        <p>
+          Motion : Gangnam Style | Genre : Pop
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website code is based on <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+            We appreciate the authors for sharing the templates.
+          </p>
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
